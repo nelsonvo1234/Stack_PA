@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Stack;
 
 public class Stack_PA
@@ -32,7 +33,14 @@ public class Stack_PA
      */
     public static void splitStack(Stack<Integer> stack, Stack<Integer> odd, Stack<Integer> even)
     {
-        
+        while(!stack.empty())
+        {
+            int i = stack.pop();
+            if(i % 2 == 0)
+                even.push(i);
+            else
+                odd.push(i);
+        }
     }
 
     /* @param stack - is a stack of Integer values
@@ -47,8 +55,18 @@ public class Stack_PA
      */
     public static int removeDuplicates(Stack<Integer> stack)
     {
-
-        return 0;
+        int sizeInit = stack.size();
+        ArrayList<Integer> rDupe = new ArrayList<Integer>();
+        while(!stack.empty())
+        {
+            if(!rDupe.contains(stack.peek()))
+                rDupe.add(stack.pop());
+            else
+                stack.pop();
+        }
+        while(!rDupe.isEmpty())
+            stack.push(rDupe.remove(rDupe.size() - 1));
+        return sizeInit - stack.size();
     }
 
     /* @param stack - is a stack of Integer values
@@ -61,7 +79,22 @@ public class Stack_PA
      */
     public static void removeFirstOccurrence(Stack<Integer> stack, int element)
     {
-
+        ArrayList<Integer> rDupe = new ArrayList<Integer>();
+        boolean removed = false;
+        while(!stack.empty())
+        {
+            rDupe.add(stack.pop());
+        }
+        for(int i = rDupe.size() - 1; i >= 0; i--)
+        {
+            if(rDupe.get(i) == element && !removed)
+            {
+                rDupe.remove(i);
+                removed = true;
+            }    
+        }
+        while(!rDupe.isEmpty())
+            stack.push(rDupe.remove(rDupe.size() - 1));
     }
 
     /* @param stack - is a stack of String values
@@ -74,7 +107,16 @@ public class Stack_PA
      */
     public static void removeAllOccurrences(Stack<String> stack, String element)
     {
-
+        ArrayList<String> rDupe = new ArrayList<String>();
+        while(!stack.empty())
+        {
+            if(!stack.peek().equals(element))
+                rDupe.add(stack.pop());
+            else
+                stack.pop();
+        }
+        while(!rDupe.isEmpty())
+            stack.push(rDupe.remove(rDupe.size() - 1));
     }
 
     /****************** Testing **********************************/
@@ -105,8 +147,8 @@ public class Stack_PA
         Stack<Integer> even = new Stack<Integer>();
 
         // Pushing random elements on the Stack
-        for(int i = 0; i < 100; i ++)
-            list.push((int)(Math.random() * 100) + 1);
+        for(int i = 0; i < 10; i ++)
+            list.push((int)(Math.random() * 10) + 1);
 
         //display stack
         System.out.println("Stack => " + list);
